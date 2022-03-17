@@ -1,0 +1,156 @@
+version: '3.8'
+
+# Machine name for your project
+x-lagoon-project:
+  # Lagoon project name (leave `&lagoon-project` when you edit this)
+  &lagoon-project react-example
+
+# Tells Lagoon what to mount into containers
+x-volumes:
+  &default-volumes
+    # Define all volumes you would like to have real-time mounted into the docker containers
+    volumes:
+      - .:/app:delegated # :delegated sets host (i.e container) to 'read-only'
+      - ./setup.sql:/docker-entrypoint-initdb.d/setup.sql
+
+volumes:
+  files: {}
+
+# Environment specific variables
+x-environmemt:
+  &default-environment
+    LAGOON_PROJECT: *lagoon-project
+    # Route that should be used locally, if you are using pygmy, this route *must* end with .docker.amazee.io
+    LAGOON_ROUTE: &default-url http://${LAGOON_PROJECT:-react-example}.docker.amazee.io
+    # Uncomment if you like to have the system behave like in production
+    #LAGOON_ENVIRONMENT_TYPE: production
+    # Uncomment to enable xdebug and then restart via `docker-compose up -d`
+    #XDEBUG_ENABLE: "true"
+    # Mariadb Hostname is the service name
+    MARIADB_HOST: mariadb
+    # All CRA env vars must prefix with REACT_APP_
+    REACT_APP_API_ROUTE: http://api.${LAGOON_PROJECT:-react-example}.docker.amazee.io
+
+
+# Custom environment variables
+# x-custom-variables: &custom-variables
+#   CUSTOM_VAR: "custom"
+
+# Services are essentailly the Docker containers we want to run
+services:
+
+  local-data:
+    build:
+      dockerfile: node.dockerfile
+      context: ./local-data
+    labels:
+      # If only using container locally, then we tell Lagoon to ignore with 'none' type
+      lagoon.type: none
+    stdin_open: true # iteractive shell mode
+    depends_on:
+      - mariadb
+    environment:
+      # <<: *custom-environment
+      MARIADB_HOST: mariadb
+      MARIADB_USER: lagoon
+      MARIADB_PASSWORD: lagoon
+      MARIADB_DATABASE: lagoon
+    volumes:
+      - ./local-data/seed.sql:/app/seed.sql
+    networks:
+      - amazeeio-network
+      - default
+
+  # Node cli container: Handles all the setup required to build the application. It also is responsible for running the application.
+  cli:
+    #stdin_open: true
+    build:
+      context: ./client
+      dockerfile: cli.dockerfile
+    image: &cli-image ${LAGOON_PROJECT:-react-example}-cli # this image will be reused as `CLI_IMAGE` in subsequent Docker builds
+    labels:
+      # Lagoon labels
+      lagoon.type: node-persistent # Lagoon learns from setting the lagoon.type to the service you want to use for setting up the appropriate ports and k8 configuration to run.
+      lagoon.persistent.name: nginx # mount nginx persistent storage (/app/files) inside this container
+      lagoon.persistent: /app/files
+    << : *default-volumes # loads the defined volumes from the top
+    volumes_from: ### mount the ssh-agent from local pygmy ssh-agent. Automatically removed in CI.
+      - container:amazeeio-ssh-agent ### Local overrides to mount host SSH keys. Automatically removed in CI.
+    environment:
+      << : *default-environment # loads the defined environment variables from the top
+      LAGOON_LOCALDEV_URL: react-example.docker.amazee.io
+      LAGOON_LOCALDEV_HTTP_PORT: 3000
+      CHOKIDAR_USEPOLLING: "true" # CRA uses chokidar to poll for changes (like nodemon) - but its very resource heavy
+      WDS_SOCKET_PORT: 0 # CRA 5.0 doesn't work nicely with a reverse proxy so we define the web socket port here so hot-reloading works (https://github.com/facebook/create-react-app/issues/11879)
+    networks:
+      - amazeeio-network
+      - default
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: nginx.dockerfile
+      args:
+        CLI_IMAGE: *cli-image # Inject the name of the cli image
+    labels:
+      lagoon.type: nginx-persistent
+      lagoon.persistent: /app/files/ # if persisted then data will be available in container when restarted
+    << : *default-volumes # loads the defined volumes from the top
+    ports:
+      - "8080"
+    volumes:
+      - ./nginx/nginx:/app/nginx/nginx
+      - ./files:/app/files
+    environment:
+      << : *default-environment # loads the defined environment variables from the top
+      NGINX_LISTEN: 8080
+    depends_on:
+      - api # basically just tells docker-compose to build the api and cli first
+      - cli
+    networks:
+      - amazeeio-network
+      - default
+
+  mariadb:
+    image: uselagoon/mariadb
+    labels:
+      lagoon.type: mariadb
+      lando.type: mariadb
+    <<: *default-volumes # loads the defined volumes from the top
+    ports:
+      - "3306"
+    environment:
+      <<: *default-environment
+      MARIADB_HOST: localhost
+    networks:
+      - amazeeio-network
+      - default
+
+  api:
+    build:
+      context: "./api"
+      dockerfile: api.dockerfile
+    command: npm run dev # this is only ran locally
+    labels:
+      lagoon.type: node
+    <<: *default-volumes # loads the defined volumes from the top
+    environment:
+      <<: *default-environment
+      LAGOON_LOCALDEV_URL: api.react-example.docker.amazee.io
+      LAGOON_LOCALDEV_HTTP_PORT: 3001
+      MARIADB_HOST: mariadb
+      MARIADB_USER: lagoon
+      MARIADB_PASSWORD: lagoon
+      MARIADB_DATABASE: lagoon
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mariadb
+    networks:
+      - amazeeio-network
+      - default
+
+# Setup up amazeeio-network
+networks:
+  amazeeio-network:
+    external: true

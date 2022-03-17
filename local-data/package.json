@@ -1,0 +1,19 @@
+{
+  "name": "local-data",
+  "version": "1.0.0",
+  "description": "Database seeding",
+  "main": "index.js",
+  "scripts": {
+    "seed": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv-extended": "^2.9.0",
+    "fs": "^0.0.1-security",
+    "mysql2": "^2.3.3",
+    "path": "^0.12.7"
+  }
+}

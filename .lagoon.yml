@@ -6,8 +6,3 @@ environments:
     routes:
     - node:
       - react-example.com
-
-routes:
-  autogenerate:
-    prefixes:
-    - api

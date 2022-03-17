@@ -124,29 +124,29 @@ services:
       - amazeeio-network
       - default
 
-  api:
-    build:
-      context: "./api"
-      dockerfile: api.dockerfile
-    command: npm run dev # this is only ran locally
-    labels:
-      lagoon.type: node
-    <<: *default-volumes # loads the defined volumes from the top
-    environment:
-      <<: *default-environment
-      LAGOON_LOCALDEV_URL: api.react-example.docker.amazee.io
-      LAGOON_LOCALDEV_HTTP_PORT: 3001
-      MARIADB_HOST: mariadb
-      MARIADB_USER: lagoon
-      MARIADB_PASSWORD: lagoon
-      MARIADB_DATABASE: lagoon
-    ports:
-      - "3001:3001"
-    depends_on:
-      - mariadb
-    networks:
-      - amazeeio-network
-      - default
+  # api:
+  #   build:
+  #     context: "./api"
+  #     dockerfile: api.dockerfile
+  #   command: npm run dev # this is only ran locally
+  #   labels:
+  #     lagoon.type: node
+  #   <<: *default-volumes # loads the defined volumes from the top
+  #   environment:
+  #     <<: *default-environment
+  #     LAGOON_LOCALDEV_URL: api.react-example.docker.amazee.io
+  #     LAGOON_LOCALDEV_HTTP_PORT: 3001
+  #     MARIADB_HOST: mariadb
+  #     MARIADB_USER: lagoon
+  #     MARIADB_PASSWORD: lagoon
+  #     MARIADB_DATABASE: lagoon
+  #   ports:
+  #     - "3001:3001"
+  #   depends_on:
+  #     - mariadb
+  #   networks:
+  #     - amazeeio-network
+  #     - default
 
 # Setup up amazeeio-network
 networks:

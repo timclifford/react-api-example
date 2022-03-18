@@ -12,6 +12,6 @@ COPY wait-for-mariadb.sh /lagoon/entrypoints/99-wait-for-mariadb.sh
 
 WORKDIR /app/api
 ENV WEBROOT=/app/api
-EXPOSE 3001
+EXPOSE 3000
 
 CMD ["npm", "run", "start"]

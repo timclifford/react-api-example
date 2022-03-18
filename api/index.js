@@ -17,13 +17,8 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-// home page
-app.get('/', (req, res) => {
-  res.send('Hello CloudFest!!')
-});
-
 // get all of the reviews in the database
-app.get('/get', (req, res) => {
+app.get('/api/get', (req, res) => {
   const SelectQuery = "SELECT * FROM lagoon_reviews";
   db.query(SelectQuery, (err, result) => {
     if (err) console.log("Error: ", err);
@@ -33,7 +28,7 @@ app.get('/get', (req, res) => {
 })
 
 // add a review to the database
-app.post("/insert", (req, res) => {
+app.post("/api/insert", (req, res) => {
   const name = req.body.setName;
   const company = req.body.setCompany;
   const review = req.body.setReview;
@@ -45,7 +40,7 @@ app.post("/insert", (req, res) => {
 })
 
 // delete a review from the database
-app.delete("/delete/:reviewId", (req, res) => {
+app.delete("/api/delete/:reviewId", (req, res) => {
   const id = req.params.reviewId;
   const DeleteQuery = "DELETE FROM lagoon_reviews WHERE id = ?";
   db.query(DeleteQuery, id, (err, result) => {
@@ -55,7 +50,7 @@ app.delete("/delete/:reviewId", (req, res) => {
 })
 
 // update a review
-app.put("/update/:reviewId", (req, res) => {
+app.put("/api/update/:reviewId", (req, res) => {
   const reviewUpdate = req.body.reviewUpdate;
   const id = req.params.reviewId;
   const UpdateQuery = "UPDATE lagoon_reviews SET review = ? WHERE id = ?";
@@ -65,4 +60,4 @@ app.put("/update/:reviewId", (req, res) => {
   })
 })
 
-app.listen('3001', () => { })
+app.listen('3000', () => { })

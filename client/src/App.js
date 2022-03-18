@@ -5,6 +5,10 @@ import './App.css';
 import axios from 'axios';
 import { Button, Container, Card, Row } from 'react-bootstrap';
 
+const API_ROUTE = process.env.NODE_ENV === "development" ?
+    `${process.env.REACT_APP_API_ROUTE}:${process.env.REACT_APP_API_PORT}` :
+    `cli:${process.env.REACT_APP_API_PORT}`
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -32,10 +36,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-
-    console.log(process.env);
-
-    axios.get(`${process.env.REACT_APP_API_ROUTE}/get`)
+    axios.get(`${API_ROUTE}/api/get`)
       .then((response) => {
         this.setState({
           fetchData: response.data
@@ -44,7 +45,7 @@ class App extends Component {
   }
 
   submit = () => {
-    axios.post(`${process.env.REACT_APP_API_ROUTE}/insert`, this.state)
+    axios.post(`${API_ROUTE}/api/insert`, this.state)
       .then(() => { alert('success post') })
     console.log(this.state)
     document.location.reload();
@@ -52,13 +53,13 @@ class App extends Component {
 
   delete = (id) => {
     if (confirm("Do you want to delete? ")) {
-      axios.delete(`${process.env.REACT_APP_API_ROUTE}/delete/${id}`)
+      axios.delete(`${API_ROUTE}/api/delete/${id}`)
       document.location.reload()
     }
   }
 
   edit = (id) => {
-    axios.put(`${process.env.REACT_APP_API_ROUTE}/update/${id}`, this.state)
+    axios.put(`${API_ROUTE}/api/update/${id}`, this.state)
     document.location.reload();
   }
 

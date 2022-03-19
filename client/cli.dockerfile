@@ -24,7 +24,7 @@ ENV WDS_SOCKET_PORT 0
 ENV WEBROOT=/app/client
 EXPOSE 3000
 
-RUN --chown=node:node npm run build
+RUN chown -R node:node npm run build
 
 USER node
 CMD ["npm", "run", "start"]

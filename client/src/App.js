@@ -5,9 +5,7 @@ import './App.css';
 import axios from 'axios';
 import { Button, Container, Card, Row } from 'react-bootstrap';
 
-const API_ROUTE = process.env.NODE_ENV === "development" ?
-    `${process.env.REACT_APP_API_ROUTE}:${process.env.REACT_APP_API_PORT}` :
-    `cli:${process.env.REACT_APP_API_PORT}`
+const API_ROUTE = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_ROUTE}` : `api`
 
 class App extends Component {
   constructor(props) {

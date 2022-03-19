@@ -2,7 +2,21 @@
 docker-compose-yaml: docker-compose.yml
 
 environments:
-  prod:
+  main:
     routes:
-    - node:
-      - react-example.com
+    - cli:
+      - 'react-example.com':
+        tls-acme: 'true'
+        insecure: Redirect
+    - api:
+      - 'api.react-example.com':
+        tls-acme: 'true'
+        insecure: Redirect
+  dev:
+    routes:
+      - cli
+      - api
+
+routes:
+  autogenerate:
+    insecure: 'Redirect'

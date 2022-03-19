@@ -3,22 +3,52 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const app = express();
 
-// Add mariadb database connection
+// extract env vars
+const {
+  MARIADB_HOST,
+  MARIADB_USER,
+  MARIADB_PASSWORD,
+  MARIADB_DATABASE,
+  REACT_APP_NAME,
+  REACT_APP_API_ROUTE,
+  REACT_APP_API_PORT,
+  NODE_ENV,
+  CORS,
+} = process.env
+
+// add mariadb database connection
 const db = mysql.createPool({
-  host: process.env.MARIADB_HOST,
-  user: process.env.MARIADB_USER, 
-  password: process.env.MARIADB_PASSWORD,
-  database: process.env.MARIADB_DATABASE
+  host: MARIADB_HOST,
+  user: MARIADB_USER, 
+  password: MARIADB_PASSWORD,
+  database: MARIADB_DATABASE
 })
 
-// Enable cors security headers
-app.use(cors())
+const PORT = REACT_APP_API_PORT || 3000
+
+// debug info
+const debug = true
+if (debug || NODE_ENV === 'development') {
+  console.log('API ⚙️ ~ REACT_APP_API_ROUTE', REACT_APP_API_ROUTE)
+  console.log('API ⚙️ ~ CORS', CORS)
+  console.log('API ⚙️ ~ NODE_ENV', NODE_ENV)
+  console.log('API ⚙️ ~ PORT', PORT)
+}
+
+// cors
+const corsOptions = {
+  origin: CORS ? CORS.split(',') : true,
+  methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
+}
+app.use(cors(corsOptions))
+
 // add an express method to parse the POST method
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
+
 // get all of the reviews in the database
-app.get('/api/get', (req, res) => {
+app.get('/api/get', (req, res, next) => {
   const SelectQuery = "SELECT * FROM lagoon_reviews";
   db.query(SelectQuery, (err, result) => {
     if (err) console.log("Error: ", err);
@@ -28,7 +58,7 @@ app.get('/api/get', (req, res) => {
 })
 
 // add a review to the database
-app.post("/api/insert", (req, res) => {
+app.post("/api/insert", cors(corsOptions), (req, res, next) => {
   const name = req.body.setName;
   const company = req.body.setCompany;
   const review = req.body.setReview;
@@ -40,7 +70,7 @@ app.post("/api/insert", (req, res) => {
 })
 
 // delete a review from the database
-app.delete("/api/delete/:reviewId", (req, res) => {
+app.delete("/api/delete/:reviewId", cors(corsOptions), (req, res, next) => {
   const id = req.params.reviewId;
   const DeleteQuery = "DELETE FROM lagoon_reviews WHERE id = ?";
   db.query(DeleteQuery, id, (err, result) => {
@@ -50,7 +80,7 @@ app.delete("/api/delete/:reviewId", (req, res) => {
 })
 
 // update a review
-app.put("/api/update/:reviewId", (req, res) => {
+app.put("/api/update/:reviewId", cors(corsOptions), (req, res, next) => {
   const reviewUpdate = req.body.reviewUpdate;
   const id = req.params.reviewId;
   const UpdateQuery = "UPDATE lagoon_reviews SET review = ? WHERE id = ?";
@@ -60,4 +90,6 @@ app.put("/api/update/:reviewId", (req, res) => {
   })
 })
 
-app.listen('3000', () => { })
+app.listen('3000', () => { 
+  console.log(`api server started on port: ${PORT}`);
+})

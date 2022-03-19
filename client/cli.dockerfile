@@ -12,7 +12,6 @@ WORKDIR /app/client
 
 # Copying the .env.defaults into the Workdir, as the dotenv system searches within the workdir for it
 COPY --from=builder /app/.env.defaults .
-COPY --from=builder /app/.lagoon.env.dev .
 
 # copy the rest over
 COPY . .
@@ -23,6 +22,8 @@ ENV NODE_ENV production
 # set the webroot and expose node port 3000
 ENV WEBROOT=/app/client
 EXPOSE 3000
+
+ENV WDS_SOCKET_PORT 0
 
 RUN npm run build
 CMD ["npm", "run", "start"]

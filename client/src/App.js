@@ -3,9 +3,13 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
+import env from "@beam-australia/react-env";
 import { Button, Container, Card, Row } from 'react-bootstrap';
 
-const API_ROUTE = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_ROUTE}` : `api`
+const API_ROUTE = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_ROUTE}` : env("API_ROUTE")
+
+console.log("REACT_APP_API_ROUTE: ", env("API_ROUTE"));
+console.log("REACT_APP_NAME: ", env("NAME"));
 
 class App extends Component {
   constructor(props) {

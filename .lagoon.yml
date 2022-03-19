@@ -5,18 +5,6 @@ environments:
   main:
     routes:
       - cli:
-        - 'react-example.com':
-          tls-acme: 'true'
-          insecure: Redirect
+        - react-example.com
       - api:
-        - 'api.react-example.com':
-          tls-acme: 'true'
-          insecure: Redirect
-  dev:
-    routes:
-      - cli
-      - api
-
-routes:
-  autogenerate:
-    insecure: 'Redirect'
+        - api.react-example.com

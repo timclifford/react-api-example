@@ -24,12 +24,10 @@ x-environmemt:
     LAGOON_ROUTE: &default-url http://${LAGOON_PROJECT:-react-example}.docker.amazee.io
     # Uncomment if you like to have the system behave like in production
     #LAGOON_ENVIRONMENT_TYPE: production
-    # Uncomment to enable xdebug and then restart via `docker-compose up -d`
-    #XDEBUG_ENABLE: "true"
     # Mariadb Hostname is the service name
     MARIADB_HOST: mariadb
     # All CRA env vars must prefix with REACT_APP_
-    REACT_APP_API_ROUTE: http://api.react-example.docker.amazee.io
+    REACT_APP_API_ROUTE: http://api.react-example.docker.amazee.io:3000
     REACT_APP_API_PORT: 3000
     # Cors
     CORS: http://react-example.docker.amazee.io # Allow react host origin

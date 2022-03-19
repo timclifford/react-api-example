@@ -17,7 +17,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-env --env NODE_ENV -- react-scripts start",
+    "dev": "NODE_ENV=development react-env --env NODE_ENV -- react-scripts start",
+    "start": "NODE_ENV=production react-env --env NODE_ENV -- react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

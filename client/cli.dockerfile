@@ -11,7 +11,7 @@ COPY --from=builder --chown=node:node /app/node_modules /app/node_modules
 WORKDIR /app/client
 
 # Copying the .env.defaults into the Workdir, as the dotenv system searches within the workdir for it
-COPY --from=builder /app/.env.defaults .
+COPY --from=builder /app/.env.* .
 
 # copy the rest over
 COPY --chown=node:node . .

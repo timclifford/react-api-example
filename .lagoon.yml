@@ -4,14 +4,14 @@ docker-compose-yaml: docker-compose.yml
 environments:
   main:
     routes:
-    - cli:
-      - 'react-example.com':
-        tls-acme: 'true'
-        insecure: Redirect
-    - api:
-      - 'api.react-example.com':
-        tls-acme: 'true'
-        insecure: Redirect
+      - cli:
+        - 'react-example.com':
+          tls-acme: 'true'
+          insecure: Redirect
+      - api:
+        - 'api.react-example.com':
+          tls-acme: 'true'
+          insecure: Redirect
   dev:
     routes:
       - cli

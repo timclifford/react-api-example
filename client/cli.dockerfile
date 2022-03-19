@@ -26,4 +26,6 @@ EXPOSE 3000
 ENV WDS_SOCKET_PORT 0
 
 RUN npm run build
+
+USER node
 CMD ["npm", "run", "start"]

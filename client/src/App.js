@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
+// Allows you to read react env vars at runtime, rather than at build time
 import env from "@beam-australia/react-env";
 import { Button, Container, Card, Row } from 'react-bootstrap';
 

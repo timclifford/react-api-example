@@ -46,6 +46,9 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/', (req, res, next) => {
+  res.send("REST API")
+});
 
 // get all of the reviews in the database
 app.get('/api/get', (req, res, next) => {

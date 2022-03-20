@@ -7,13 +7,16 @@ import axios from 'axios';
 import env from "@beam-australia/react-env";
 import { Button, Container, Card, Row } from 'react-bootstrap';
 
-const API_ROUTE = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_ROUTE}` : `${env("API_ROUTE")}`
-const API_PORT = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_PORT}` : `${env("API_PORT")}`
+const API_ROUTE = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_ROUTE}` : `${env("API_ROUTE")}`;
+const API_PORT = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_PORT}` : `${env("API_PORT")}`;
+const API_ENDPOINT = process.env.NODE_ENV === "development" ? `${API_ROUTE}:${API_PORT}:${API_PORT}` : `${API_ROUTE}`;
+const APP_NAME = `${env("NAME")}`;
 
 console.log("NODE_ENV: ", process.env.NODE_ENV);
 console.log("REACT_APP_API_ROUTE: ", API_ROUTE);
 console.log("REACT_APP_API_PORT: ",  API_PORT);
 console.log("REACT_APP_NAME: ", env("NAME"));
+console.log("API_ENDPOINT: ", API_ENDPOINT);
 
 class App extends Component {
   constructor(props) {
@@ -42,7 +45,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get(`${API_ROUTE}:${API_PORT}/api/get`)
+    axios.get(`${API_ENDPOINT}/api/get`)
       .then((response) => {
         this.setState({
           fetchData: response.data
@@ -51,7 +54,7 @@ class App extends Component {
   }
 
   submit = () => {
-    axios.post(`${API_ROUTE}:${API_PORT}/api/insert`, this.state)
+    axios.post(`${API_ENDPOINT}/api/insert`, this.state)
       .then(() => { alert('success post') })
     console.log(this.state)
     document.location.reload();
@@ -59,13 +62,13 @@ class App extends Component {
 
   delete = (id) => {
     if (confirm("Do you want to delete? ")) {
-      axios.delete(`${API_ROUTE}:${API_PORT}/api/delete/${id}`)
+      axios.delete(`${API_ENDPOINT}/api/delete/${id}`)
       document.location.reload()
     }
   }
 
   edit = (id) => {
-    axios.put(`${API_ROUTE}:${API_PORT}/api/update/${id}`, this.state)
+    axios.put(`${API_ENDPOINT}/api/update/${id}`, this.state)
     document.location.reload();
   }
 
@@ -93,7 +96,7 @@ class App extends Component {
 
     return (
       <div className='app'>
-        <h1>Lagoonised React App with Express API</h1>
+        <h1>{APP_NAME}: Lagoon-ised React App with Express API</h1>
         <div className='form'>
           <input name='setName' placeholder='Enter Name' onChange={this.handleChange} />
           <input name='setCompany' placeholder='Enter Company Name' onChange={this.handleChange} />

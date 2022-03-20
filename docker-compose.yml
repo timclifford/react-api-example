@@ -115,7 +115,7 @@ services:
   mariadb:
     image: uselagoon/mariadb
     labels:
-      lagoon.type: mariadb
+      lagoon.type: mariadb-single
       lando.type: mariadb
     <<: *default-volumes # loads the defined volumes from the top
     ports:

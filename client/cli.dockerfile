@@ -17,7 +17,8 @@ COPY --from=builder /app/.env.* .
 COPY --chown=node:node . .
 
 # making sure we run in production
-ENV NODE_ENV production
+#ENV NODE_ENV production
+
 ENV WDS_SOCKET_PORT 0
 
 # set the webroot and expose node port 3000

@@ -9,7 +9,7 @@ import { Button, Container, Card, Row } from 'react-bootstrap';
 
 const API_ROUTE = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_ROUTE}` : `${env("API_ROUTE")}`;
 const API_PORT = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_PORT}` : `${env("API_PORT")}`;
-const API_ENDPOINT = process.env.NODE_ENV === "development" ? `${API_ROUTE}:${API_PORT}` : `${API_ROUTE}`;
+const API_ENDPOINT = process.env.REACT_APP_LOCAL ? `${API_ROUTE}:${API_PORT}` : `${API_ROUTE}`;
 
 console.log("NODE_ENV: ", process.env.NODE_ENV);
 console.log("REACT_APP_API_ROUTE: ", API_ROUTE);

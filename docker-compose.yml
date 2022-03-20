@@ -81,7 +81,7 @@ services:
       << : *default-environment # loads the defined environment variables from the top
       LAGOON_LOCALDEV_URL: react-example.docker.amazee.io
       LAGOON_LOCALDEV_HTTP_PORT: 3000
-      NODE_ENV: development
+      REACT_APP_LOCAL: "true"
       CHOKIDAR_USEPOLLING: "true" # CRA uses chokidar to poll for changes (like nodemon) - but its very resource heavy
       WDS_SOCKET_PORT: 0 # CRA 5.0 doesn't work nicely with a reverse proxy so we define the web socket port here so hot-reloading works (https://github.com/facebook/create-react-app/issues/11879)
     networks:

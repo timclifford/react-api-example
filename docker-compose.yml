@@ -27,7 +27,7 @@ x-environmemt:
     # Mariadb Hostname is the service name
     MARIADB_HOST: mariadb
     # All CRA env vars must prefix with REACT_APP_
-    REACT_APP_API_ROUTE: http://api.react-example.docker.amazee.io:3000
+    REACT_APP_API_ROUTE: http://api.react-example.docker.amazee.io
     REACT_APP_API_PORT: 3000
     # Cors
     CORS: http://react-example.docker.amazee.io # Allow react host origin

@@ -7,9 +7,12 @@ import axios from 'axios';
 import env from "@beam-australia/react-env";
 import { Button, Container, Card, Row } from 'react-bootstrap';
 
-const API_ROUTE = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_ROUTE}` : env("API_ROUTE")
+const API_ROUTE = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_ROUTE}` : `${env("API_ROUTE")}`
+const API_PORT = process.env.NODE_ENV === "development" ? `${process.env.REACT_APP_API_PORT}` : `${env("API_PORT")}`
 
-console.log("REACT_APP_API_ROUTE: ", env("API_ROUTE"));
+console.log("NODE_ENV: ", process.env.NODE_ENV);
+console.log("REACT_APP_API_ROUTE: ", API_ROUTE);
+console.log("REACT_APP_API_PORT: ",  API_PORT);
 console.log("REACT_APP_NAME: ", env("NAME"));
 
 class App extends Component {
@@ -39,7 +42,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get(`${API_ROUTE}/api/get`)
+    axios.get(`${API_ROUTE}:${API_PORT}/api/get`)
       .then((response) => {
         this.setState({
           fetchData: response.data
@@ -48,7 +51,7 @@ class App extends Component {
   }
 
   submit = () => {
-    axios.post(`${API_ROUTE}/api/insert`, this.state)
+    axios.post(`${API_ROUTE}:${API_PORT}/api/insert`, this.state)
       .then(() => { alert('success post') })
     console.log(this.state)
     document.location.reload();
@@ -56,13 +59,13 @@ class App extends Component {
 
   delete = (id) => {
     if (confirm("Do you want to delete? ")) {
-      axios.delete(`${API_ROUTE}/api/delete/${id}`)
+      axios.delete(`${API_ROUTE}:${API_PORT}/api/delete/${id}`)
       document.location.reload()
     }
   }
 
   edit = (id) => {
-    axios.put(`${API_ROUTE}/api/update/${id}`, this.state)
+    axios.put(`${API_ROUTE}:${API_PORT}/api/update/${id}`, this.state)
     document.location.reload();
   }
 

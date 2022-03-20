@@ -25,7 +25,7 @@ ENV WEBROOT=/app/client
 EXPOSE 3000
 
 RUN npm run build
+RUN npm run compile-runtime-envs && chown -R node:node /app/client/public
 
 USER node
-CMD npm run compile-runtime-envs && chown -R node:node /app/client/public && npm run start
-# CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start"]

@@ -95,7 +95,7 @@ class App extends Component {
 
     return (
       <div className='app'>
-        <h1>{process.env.REACT_APP_NAME}: Lagoon-ised React App with Express API</h1>
+        <h1>{process.env.REACT_APP_NAME}: Lagoon-ised React App with Express REST API</h1>
         <div className='form'>
           <input name='setName' placeholder='Enter Name' onChange={this.handleChange} />
           <input name='setCompany' placeholder='Enter Company Name' onChange={this.handleChange} />

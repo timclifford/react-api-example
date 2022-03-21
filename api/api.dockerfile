@@ -12,6 +12,11 @@ COPY . .
 # at the same time. So we have a small entrypoint which waits for mariadb to be fully ready.
 COPY wait-for-mariadb.sh /lagoon/entrypoints/99-wait-for-mariadb.sh
 
+ENV MARIADB_HOST=mariadb
+ENV MARIADB_USER=lagoon
+ENV MARIADB_PASSWORD=lagoon
+ENV MARIADB_DATABASE=lagoon
+
 ENV WEBROOT=/app/api
 EXPOSE 3000
 

@@ -11,7 +11,7 @@ x-volumes:
     # Define all volumes you would like to have real-time mounted into the docker containers
     volumes:
       - .:/app:delegated # :delegated sets host (i.e container) to 'read-only'
-      - ./setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - ./mariadb/setup.sql:/docker-entrypoint-initdb.d/setup.sql
 
 volumes:
   files: {}
@@ -113,7 +113,10 @@ services:
       - default
 
   mariadb:
-    image: uselagoon/mariadb
+    build:
+      context: ./mariadb
+      dockerfile: mariadb.dockerfile
+    # image: uselagoon/mariadb
     labels:
       lagoon.type: mariadb-single
       lando.type: mariadb

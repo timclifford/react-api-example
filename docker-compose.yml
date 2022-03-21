@@ -3,7 +3,7 @@ version: '3.8'
 # Machine name for your project
 x-lagoon-project:
   # Lagoon project name (leave `&lagoon-project` when you edit this)
-  &lagoon-project react-example
+  &lagoon-project react-api-demo
 
 # Tells Lagoon what to mount into containers
 x-volumes:
@@ -21,16 +21,16 @@ x-environmemt:
   &default-environment
     LAGOON_PROJECT: *lagoon-project
     # Route that should be used locally, if you are using pygmy, this route *must* end with .docker.amazee.io
-    LAGOON_ROUTE: &default-url http://${LAGOON_PROJECT:-react-example}.docker.amazee.io
+    LAGOON_ROUTE: &default-url http://${LAGOON_PROJECT:-react-api-demo}.docker.amazee.io
     # Uncomment if you like to have the system behave like in production
     #LAGOON_ENVIRONMENT_TYPE: production
     # Mariadb Hostname is the service name
     MARIADB_HOST: mariadb
     # All CRA env vars must prefix with REACT_APP_
-    REACT_APP_API_ROUTE: http://api.react-example.docker.amazee.io
+    REACT_APP_API_ROUTE: http://api.react-api-demo.docker.amazee.io
     REACT_APP_API_PORT: 3000
     # Cors
-    CORS: http://react-example.docker.amazee.io # Allow react host origin
+    CORS: http://react-api-demo.docker.amazee.io # Allow react host origin
 
 
 # Custom environment variables
@@ -68,7 +68,7 @@ services:
     build:
       context: ./client
       dockerfile: cli.dockerfile
-    image: &cli-image ${LAGOON_PROJECT:-react-example}-cli # this image will be reused as `CLI_IMAGE` in subsequent Docker builds
+    image: &cli-image ${LAGOON_PROJECT:-react-api-demo}-cli # this image will be reused as `CLI_IMAGE` in subsequent Docker builds
     labels:
       # Lagoon labels
       lagoon.type: node-persistent # Lagoon learns from setting the lagoon.type to the service you want to use for setting up the appropriate ports and k8 configuration to run.
@@ -79,7 +79,7 @@ services:
       - container:amazeeio-ssh-agent ### Local overrides to mount host SSH keys. Automatically removed in CI.
     environment:
       << : *default-environment # loads the defined environment variables from the top
-      LAGOON_LOCALDEV_URL: react-example.docker.amazee.io
+      LAGOON_LOCALDEV_URL: react-api-demo.docker.amazee.io
       LAGOON_LOCALDEV_HTTP_PORT: 3000
       REACT_APP_LOCAL: "true"
       CHOKIDAR_USEPOLLING: "true" # CRA uses chokidar to poll for changes (like nodemon) - but its very resource heavy
@@ -143,7 +143,7 @@ services:
     <<: *default-volumes # loads the defined volumes from the top
     environment:
       <<: *default-environment
-      LAGOON_LOCALDEV_URL: api.react-example.docker.amazee.io
+      LAGOON_LOCALDEV_URL: api.react-api-demo.docker.amazee.io
       LAGOON_LOCALDEV_HTTP_PORT: 3000
       MARIADB_HOST: mariadb
       MARIADB_USER: lagoon

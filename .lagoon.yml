@@ -5,6 +5,6 @@ environments:
   main:
     routes:
       - cli:
-        - react-example.com
+        - react-api-demo.com
       - api:
-        - api.react-example.com
+        - api.react-api-demo.com

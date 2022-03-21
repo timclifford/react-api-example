@@ -71,8 +71,8 @@ services:
     labels:
       # Lagoon labels
       # Lagoon learns from setting the lagoon.type to the service you want to use for setting up the appropriate ports and k8 configuration to run.
-      #lagoon.name: cli # By default, the name is the conatiner/service name - i.e 'cli' in this case. See here for all the service types - https://docs.lagoon.sh/using-lagoon-advanced/service-types
-      lagoon.type: cli-persistent # We are informing Lagoon here we are running a node image, with persisted storage
+      # See here for all the service types - https://docs.lagoon.sh/using-lagoon-advanced/service-types
+      lagoon.type: node-persistent # We are informing Lagoon here we are running a node image, with persisted storage
       lagoon.persistent: /app/files # The absolute path where persistent storage will be mounted
     ## Local only from here
     << : *default-volumes # loads the defined volumes from the top
@@ -96,13 +96,13 @@ services:
       args:
         CLI_IMAGE: *cli-image # Inject the name of the cli image
     labels:
-      lagoon.type: nginx
+      lagoon.type: nginx # nginx container, exposes port 8080
+    # Local only
     << : *default-volumes # loads the defined volumes from the top
     ports:
       - "8080"
     volumes:
       - ./nginx/nginx:/app/nginx/nginx
-      - ./files:/app/files
     environment:
       << : *default-environment # loads the defined environment variables from the top
       NGINX_LISTEN: 8080
@@ -119,8 +119,9 @@ services:
       dockerfile: mariadb.dockerfile
     # image: uselagoon/mariadb
     labels:
-      lagoon.type: mariadb-single
+      lagoon.type: mariadb-single # Standard mariadb container with 24h cron or backups
       lando.type: mariadb
+    # Local only
     <<: *default-volumes # loads the defined volumes from the top
     ports:
       - "3306"
@@ -136,7 +137,7 @@ services:
       context: ./api
       dockerfile: api.dockerfile
     labels:
-      lagoon.type: node
+      lagoon.type: node # node container on port 3000, with no persistent storage
     depends_on:
       - mariadb
     ## Local only

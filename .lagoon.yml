@@ -8,3 +8,39 @@ environments:
         - react-example.com
       - api:
         - api.react-example.com
+
+lagoon-sync:
+  ssh:
+  #   host: "example.ssh.lagoon.amazeeio.cloud"
+    # port: "32222"
+  #   privateKey: "~/.ssh/example_id_rsa"
+  #   verbose: true
+  mariadb:
+    config:
+      hostname: "$MARIADB_HOST"
+      username: "$MARIADB_USERNAME"
+      password: "$MARIADB_PASSWORD"
+      port: "$MARIADB_PORT"
+      database: "$MARIADB_DATABASE"
+      ignore-table:
+        - "table_to_ignore"
+      ignore-table-data:
+        - "cache_data"
+        - "cache_menu"
+    local:
+      config:
+        hostname: "mariadb"
+        username: "drupal"
+        password: "drupal"
+        port: "3306"
+        database: "drupal"
+  # mongodb:
+  #   config:
+  #     hostname: "$MONGODB_HOST"
+  #     port: "$MONGODB_SERVICE_PORT"
+  #     database: "MONGODB_DATABASE"
+  #   local:
+  #     config:
+  #       hostname: "$MONGODB_HOST"
+  #       port: "27017"
+  #       database: "local"

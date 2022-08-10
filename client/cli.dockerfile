@@ -51,7 +51,11 @@ RUN npm run compile-runtime-envs && chown -R node:node /app/client/public
 
 USER node
 
-ENV MARIADB_PORT 3306
+ENV MARIADB_HOST mariadb \
+    MARIADB_USER lagoon \
+    MARIADB_PASSWORD lagoon \
+    MARIADB_DATABASE lagoon \
+    MARIADB_PORT 3306
 
 ENTRYPOINT ["/sbin/tini", "--", "/lagoon/entrypoints.sh"]
 CMD ["npm", "run", "start"]

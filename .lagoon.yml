@@ -18,22 +18,22 @@ lagoon-sync:
   mariadb:
     config:
       hostname: "$MARIADB_HOST"
-      username: "$MARIADB_USERNAME"
+      username: "$MARIADB_USER"
       password: "$MARIADB_PASSWORD"
       port: "$MARIADB_PORT"
       database: "$MARIADB_DATABASE"
-      ignore-table:
-        - "table_to_ignore"
-      ignore-table-data:
-        - "cache_data"
-        - "cache_menu"
+      # ignore-table:
+      #   - "table_to_ignore"
+      # ignore-table-data:
+      #   - "cache_data"
+      #   - "cache_menu"
     local:
       config:
         hostname: "mariadb"
-        username: "drupal"
-        password: "drupal"
+        username: "lagoon"
+        password: "lagoon"
         port: "3306"
-        database: "drupal"
+        database: "lagoon"
   # mongodb:
   #   config:
   #     hostname: "$MONGODB_HOST"

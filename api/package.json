@@ -22,7 +22,7 @@
     "exec": "node index.js"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^3.0.0"
   },
   "dependencies": {
     "cors": "^2.8.5",
